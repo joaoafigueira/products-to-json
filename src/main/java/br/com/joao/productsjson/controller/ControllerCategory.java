@@ -24,7 +24,7 @@ public class ControllerCategory {
 	@GetMapping
 	@Cacheable(value = "availableCategories")
 	public Page<CategoryDto> returnsAvailableCategories(
-			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pagination) {
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
 		Page<Category> categories = repositoryCategory.findAll(pagination);
 
