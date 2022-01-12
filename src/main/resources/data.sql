@@ -1,1 +1,1 @@
-INSERT INTO CATEGORY(category_name) values ('BOOKS','ELECTRONICS','COSMETICS','CLOTHES');
+insert into category(category_name)values('BOOKS','ELECTRONICS','CLOTHES','COSMETICS')

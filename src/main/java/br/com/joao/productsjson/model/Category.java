@@ -19,7 +19,6 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@JsonIgnore
 	@Enumerated(EnumType.STRING)
 	private CategoryStatus categoryStatus;
 	
