@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Entity
@@ -23,6 +25,7 @@ public class Product {
 	private BigDecimal productPrice;
 
 	@ManyToOne
+	@JsonBackReference
 	private Category category;
 
 	public Product() {

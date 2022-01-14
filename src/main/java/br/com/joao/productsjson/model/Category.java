@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
@@ -27,7 +27,7 @@ public class Category {
 	private CategoryStatus categoryStatus;
 
 	private String categoryName;
-	@JsonIgnore 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "category")
 	private List<Product> products = new ArrayList<>();
 
