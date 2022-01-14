@@ -13,22 +13,25 @@ import lombok.Data;
 @Entity
 @Data
 public class Product {
-	
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String productName;
-	
+
 	private BigDecimal productPrice;
-	
+
 	@ManyToOne
 	private Category category;
-	
-	
-	
-	
-	
+
+	public Product() {
+	}
+
+	public Product(String productName, BigDecimal productPrice, Category category) {
+		this.productName = productName;
+		this.productPrice = productPrice;
+		this.category = category;
+	}
 
 }

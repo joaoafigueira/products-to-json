@@ -6,4 +6,7 @@ import br.com.joao.productsjson.model.Category;
 
 public interface RepositoryCategory extends JpaRepository<Category, Long>{
 
+
+	Category findByCategoryName(String categoryName);
+
 }
