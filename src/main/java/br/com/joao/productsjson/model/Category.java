@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Entity
@@ -25,7 +27,7 @@ public class Category {
 	private CategoryStatus categoryStatus;
 
 	private String categoryName;
-
+	@JsonIgnore 
 	@OneToMany(mappedBy = "category")
 	private List<Product> products = new ArrayList<>();
 
