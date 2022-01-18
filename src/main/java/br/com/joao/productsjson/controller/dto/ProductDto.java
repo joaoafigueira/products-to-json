@@ -3,7 +3,6 @@ package br.com.joao.productsjson.controller.dto;
 import java.math.BigDecimal;
 
 import org.springframework.data.domain.Page;
-
 import br.com.joao.productsjson.model.Category;
 import br.com.joao.productsjson.model.Product;
 

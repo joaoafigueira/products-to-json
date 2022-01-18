@@ -49,7 +49,7 @@ public class ControllerCategory {
 
 	@PostMapping("newProduct")
 	@Transactional
-	@CacheEvict(value = "availableCategories", allEntries = true)
+	@CacheEvict(value = {"availableCategories", "availableProducts"}, allEntries = true)
 	public ResponseEntity<ProductDto> registerProducts(@RequestBody ProductForm productDataInsertedInTheRequestBody,
 			UriComponentsBuilder uriBuilder) {
 
@@ -61,4 +61,20 @@ public class ControllerCategory {
 		return ResponseEntity.created(uri).body(new ProductDto(product));
 	}
 
+	@GetMapping("listRegisteredProducts")
+	@Cacheable(value = "availableProducts")
+	public Page<ProductDto> returnsAvailableProducts(
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
+
+		Page<Product> products = repositoryProduct.findAll(pagination);
+
+		return ProductDto.converter(products);
+	}
+
+	
+	
+	
+	
+	
+	
 }
