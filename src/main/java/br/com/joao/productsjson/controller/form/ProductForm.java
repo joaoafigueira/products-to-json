@@ -14,7 +14,7 @@ public class ProductForm {
 	@NotNull @NotEmpty
 	private String productName;
 	
-	@NotNull @NotEmpty
+//	@NotNull @NotEmpty
 	private BigDecimal productPrice;
 	
 	@NotNull @NotEmpty
@@ -48,8 +48,11 @@ public class ProductForm {
 
 		Category category = repositoryCategory.findByCategoryName(categoryName);
 
-		return new Product(productName, productPrice, category);
-
+		if(category!=null) {
+			return new Product(productName, productPrice, category);
+		}
+		throw new NullPointerException("This Category does Not Exist in our Database");
 	}
+	
 
 }
