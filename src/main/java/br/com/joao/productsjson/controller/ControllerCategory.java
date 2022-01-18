@@ -3,6 +3,7 @@ package br.com.joao.productsjson.controller;
 import java.net.URI;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -50,7 +51,7 @@ public class ControllerCategory {
 	@PostMapping("newProduct")
 	@Transactional
 	@CacheEvict(value = {"availableCategories", "availableProducts"}, allEntries = true)
-	public ResponseEntity<ProductDto> registerProducts(@RequestBody ProductForm productDataInsertedInTheRequestBody,
+	public ResponseEntity<ProductDto> registerProducts(@RequestBody @Valid ProductForm productDataInsertedInTheRequestBody,
 			UriComponentsBuilder uriBuilder) {
 
 		Product product = productDataInsertedInTheRequestBody.convert(repositoryCategory);
