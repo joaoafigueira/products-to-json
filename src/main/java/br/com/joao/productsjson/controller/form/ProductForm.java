@@ -1,10 +1,8 @@
 package br.com.joao.productsjson.controller.form;
 
 import java.math.BigDecimal;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
 import br.com.joao.productsjson.model.Category;
 import br.com.joao.productsjson.model.Product;
 import br.com.joao.productsjson.repository.RepositoryCategory;
@@ -48,10 +46,7 @@ public class ProductForm {
 
 		Category category = repositoryCategory.findByCategoryName(categoryName);
 
-		if(category!=null) {
-			return new Product(productName, productPrice, category);
-		}
-		throw new NullPointerException("This Category does Not Exist in our Database");
+		return new Product(productName, productPrice, category);
 	}
 	
 

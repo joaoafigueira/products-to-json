@@ -1,10 +1,8 @@
 package br.com.joao.productsjson.controller;
 
 import java.net.URI;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -50,17 +48,24 @@ public class ControllerCategory {
 
 	@PostMapping("newProduct")
 	@Transactional
-	@CacheEvict(value = {"availableCategories", "availableProducts"}, allEntries = true)
-	public ResponseEntity<ProductDto> registerProducts(@RequestBody @Valid ProductForm productDataInsertedInTheRequestBody,
-			UriComponentsBuilder uriBuilder) {
+	@CacheEvict(value = { "availableCategories", "availableProducts" }, allEntries = true)
+	public ResponseEntity<ProductDto> registerProducts(
+			@RequestBody @Valid ProductForm productDataInsertedInTheRequestBody, UriComponentsBuilder uriBuilder) {
 
-		
-		Product product = productDataInsertedInTheRequestBody.convert(repositoryCategory);
-		repositoryProduct.save(product);
+		String categoryName = productDataInsertedInTheRequestBody.getCategoryName();
 
-		URI uri = uriBuilder.path("/categories/{id}").buildAndExpand(product.getId()).toUri();
+		Category categoryExistsInDatabase = repositoryCategory.findByCategoryName(categoryName);
 
-		return ResponseEntity.created(uri).body(new ProductDto(product));
+		if (categoryExistsInDatabase != null) {
+			Product product = productDataInsertedInTheRequestBody.convert(repositoryCategory);
+			repositoryProduct.save(product);
+
+			URI uri = uriBuilder.path("/categories/{id}").buildAndExpand(product.getId()).toUri();
+
+			return ResponseEntity.created(uri).body(new ProductDto(product));
+		}
+		return ResponseEntity.notFound().build();
+
 	}
 
 	@GetMapping("listRegisteredProducts")
@@ -73,10 +78,4 @@ public class ControllerCategory {
 		return ProductDto.converter(products);
 	}
 
-	
-	
-	
-	
-	
-	
 }
