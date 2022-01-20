@@ -3,6 +3,10 @@ package br.com.joao.productsjson.controller.form;
 import java.math.BigDecimal;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import br.com.joao.productsjson.model.Category;
 import br.com.joao.productsjson.model.Product;
 import br.com.joao.productsjson.repository.RepositoryCategory;
@@ -44,9 +48,15 @@ public class ProductForm {
 
 	public Product convert(RepositoryCategory repositoryCategory) {
 
+		
 		Category category = repositoryCategory.findByCategoryName(categoryName);
 
-		return new Product(productName, productPrice, category);
+		if(category!=null) {
+			
+			return new Product(productName, productPrice, category);
+		}
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Filled category does not exist in our database");
+		
 	}
 	
 

@@ -54,19 +54,12 @@ public class ControllerCategory {
 	public ResponseEntity<ProductDto> registerProducts(
 			@RequestBody @Valid ProductForm productDataInsertedInTheRequestBody, UriComponentsBuilder uriBuilder) {
 
-		String categoryName = productDataInsertedInTheRequestBody.getCategoryName();
+		Product product = productDataInsertedInTheRequestBody.convert(repositoryCategory);
+		repositoryProduct.save(product);
 
-		Category categoryExistsInDatabase = repositoryCategory.findByCategoryName(categoryName);
+		URI uri = uriBuilder.path("/categories/{id}").buildAndExpand(product.getId()).toUri();
 
-		if (categoryExistsInDatabase != null) {
-			Product product = productDataInsertedInTheRequestBody.convert(repositoryCategory);
-			repositoryProduct.save(product);
-
-			URI uri = uriBuilder.path("/categories/{id}").buildAndExpand(product.getId()).toUri();
-
-			return ResponseEntity.created(uri).body(new ProductDto(product));
-		}
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Filled category does not exist in our database");
+		return ResponseEntity.created(uri).body(new ProductDto(product));
 
 	}
 
