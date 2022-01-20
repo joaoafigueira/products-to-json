@@ -15,7 +15,7 @@ public class ProductForm {
 //	@NotNull @NotEmpty
 	private BigDecimal productPrice;
 	
-	@NotNull @NotEmpty
+	@NotNull @NotEmpty 
 	private String categoryName;
 
 	public String getProductName() {
