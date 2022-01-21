@@ -1,6 +1,8 @@
 package br.com.joao.productsjson.controller;
 
 import java.net.URI;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.joao.productsjson.controller.dto.CategoryDto;
 import br.com.joao.productsjson.controller.dto.ProductDto;
 import br.com.joao.productsjson.controller.form.ProductForm;
+import br.com.joao.productsjson.controller.form.UpdateProductForm;
 import br.com.joao.productsjson.model.Category;
 import br.com.joao.productsjson.model.Product;
 import br.com.joao.productsjson.repository.RepositoryCategory;
@@ -54,12 +59,21 @@ public class ControllerCategory {
 	public ResponseEntity<ProductDto> registerProducts(
 			@RequestBody @Valid ProductForm productDataInsertedInTheRequestBody, UriComponentsBuilder uriBuilder) {
 
-		Product product = productDataInsertedInTheRequestBody.convert(repositoryCategory);
-		repositoryProduct.save(product);
+		String categoryName = productDataInsertedInTheRequestBody.getCategoryName();
 
-		URI uri = uriBuilder.path("/categories/{id}").buildAndExpand(product.getId()).toUri();
+		Category categoryExists = repositoryCategory.findByCategoryName(categoryName);
 
-		return ResponseEntity.created(uri).body(new ProductDto(product));
+		if (categoryExists != null) {
+
+			Product product = productDataInsertedInTheRequestBody.convert(repositoryCategory);
+			repositoryProduct.save(product);
+
+			URI uri = uriBuilder.path("/categories/{id}").buildAndExpand(product.getId()).toUri();
+
+			return ResponseEntity.created(uri).body(new ProductDto(product));
+		}
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Filled category does not exist in our database");
 
 	}
 
@@ -71,6 +85,25 @@ public class ControllerCategory {
 		Page<Product> products = repositoryProduct.findAll(pagination);
 
 		return ProductDto.converter(products);
+	}
+
+	@PutMapping("updateProduct/{id}")
+	@Transactional
+	@CacheEvict(value = { "availableCategories", "availableProducts" }, allEntries = true)
+	public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id,
+			@RequestBody @Valid UpdateProductForm productUpdated) {
+
+		Optional<Product> productExist = repositoryProduct.findById(id);
+
+		if (productExist.isPresent()) {
+
+			Product product = productUpdated.update(id, repositoryProduct);
+
+			return ResponseEntity.ok(new ProductDto(product));
+		}
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This product doesnt exist in our database");
+
 	}
 
 }

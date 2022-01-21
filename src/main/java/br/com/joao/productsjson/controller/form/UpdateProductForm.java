@@ -1,25 +1,24 @@
 package br.com.joao.productsjson.controller.form;
 
 import java.math.BigDecimal;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import br.com.joao.productsjson.model.Category;
 import br.com.joao.productsjson.model.Product;
 import br.com.joao.productsjson.repository.RepositoryCategory;
+import br.com.joao.productsjson.repository.RepositoryProduct;
 
-public class ProductForm {
+public class UpdateProductForm {
 
-	@NotEmpty
 	private String productName;
 
 	@NotNull
 	@PositiveOrZero
 	private BigDecimal productPrice;
-
-	@NotEmpty
-	private String categoryName;
 
 	public String getProductName() {
 		return productName;
@@ -37,20 +36,14 @@ public class ProductForm {
 		this.productPrice = productPrice;
 	}
 
-	public String getCategoryName() {
-		return categoryName;
-	}
+	public Product update(Long id, RepositoryProduct repositoryProduct) {
 
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
+		Product product = repositoryProduct.getOne(id);
 
-	public Product convert(RepositoryCategory repositoryCategory) {
+		product.setProductName(this.productName);
+		product.setProductPrice(this.productPrice);
 
-		Category category = repositoryCategory.findByCategoryName(categoryName);
-
-		return new Product(productName, productPrice, category);
-
+		return product;
 	}
 
 }
