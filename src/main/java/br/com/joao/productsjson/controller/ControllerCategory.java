@@ -44,7 +44,7 @@ public class ControllerCategory {
 		return CategoryDto.converter(categories);
 	}
 
-	@PostMapping("newCategory")
+	@PostMapping
 	@CacheEvict(value = { "availableCategories", "availableProducts" }, allEntries = true)
 	@Transactional
 	public ResponseEntity<CategoryDto> registerCategories(

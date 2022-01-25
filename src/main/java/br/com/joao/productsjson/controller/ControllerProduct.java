@@ -54,7 +54,7 @@ public class ControllerProduct {
 		return ProductDto.converter(products);
 	}
 
-	@PostMapping("newProduct")
+	@PostMapping
 	@Transactional
 	@CacheEvict(value = { "availableCategories", "availableProducts" }, allEntries = true)
 	public ResponseEntity<ProductDto> registerProducts(
@@ -78,7 +78,7 @@ public class ControllerProduct {
 
 	}
 
-	@PutMapping("updateProduct/{id}")
+	@PutMapping("/{id}")
 	@Transactional
 	@CacheEvict(value = { "availableCategories", "availableProducts" }, allEntries = true)
 	public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id,
@@ -97,7 +97,7 @@ public class ControllerProduct {
 
 	}
 
-	@DeleteMapping("deleteProduct/{id}")
+	@DeleteMapping("/{id}")
 	@Transactional
 	@CacheEvict(value = { "availableCategories", "availableProducts" }, allEntries = true)
 	public ResponseEntity<?> removeProduct(@PathVariable Long id) {
