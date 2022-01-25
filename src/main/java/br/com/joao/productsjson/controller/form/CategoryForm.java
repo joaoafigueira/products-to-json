@@ -2,6 +2,7 @@ package br.com.joao.productsjson.controller.form;
 
 import javax.validation.constraints.NotEmpty;
 import br.com.joao.productsjson.model.Category;
+import br.com.joao.productsjson.repository.RepositoryCategory;
 
 public class CategoryForm {
 
@@ -19,6 +20,15 @@ public class CategoryForm {
 	public Category convert(String categoryName) {
 
 		return new Category(categoryName);
+	}
+
+	public Category update(Long id, RepositoryCategory repositoryCategory) {
+
+		Category category = repositoryCategory.getOne(id);
+
+		category.setCategoryName(this.categoryName);
+
+		return category;
 	}
 
 }

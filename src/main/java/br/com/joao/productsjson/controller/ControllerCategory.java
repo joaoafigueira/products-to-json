@@ -1,6 +1,7 @@
 package br.com.joao.productsjson.controller;
 
 import java.net.URI;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -15,7 +16,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.joao.productsjson.controller.dto.CategoryDto;
 import br.com.joao.productsjson.controller.form.CategoryForm;
+import br.com.joao.productsjson.controller.form.UpdateCategoryForm;
 import br.com.joao.productsjson.model.Category;
 import br.com.joao.productsjson.repository.RepositoryCategory;
 
@@ -55,7 +59,7 @@ public class ControllerCategory {
 		Category categoryNameExistsInDataBase = repositoryCategory.findByCategoryName(categoryName);
 
 		if (categoryNameExistsInDataBase == null) {
-			
+
 			Category category = categoryDataInsertedInTheRequestBody.convert(categoryName);
 
 			repositoryCategory.save(category);
@@ -64,9 +68,28 @@ public class ControllerCategory {
 
 			return ResponseEntity.created(uri).body(new CategoryDto(category));
 		}
-		throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "This category already exists in our database");
+		throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+				"This category already exists in our database");
 
+	}
 
+	@PutMapping("/{id}")
+	@Transactional
+	@CacheEvict(value = { "availableCategories", "availableProducts" }, allEntries = true)
+	public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id,
+			@RequestBody @Valid CategoryForm categoryUpdated) {
+
+		Optional<Category> categoryExist = repositoryCategory.findById(id);
+
+		if (categoryExist.isPresent()) {
+
+			Category category = categoryUpdated.update(id, repositoryCategory);
+
+			return ResponseEntity.ok(new CategoryDto(category));
+
+		}
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This product doesnt exist in our database");
 	}
 
 }
