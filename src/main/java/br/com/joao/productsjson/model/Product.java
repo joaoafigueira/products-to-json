@@ -16,6 +16,15 @@ import lombok.Data;
 @Data
 public class Product {
 
+	public Product() {
+	}
+
+	public Product(String productName, BigDecimal productPrice, Category category) {
+		this.productName = productName;
+		this.productPrice = productPrice;
+		this.category = category;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -27,14 +36,5 @@ public class Product {
 	@ManyToOne
 	@JsonBackReference
 	private Category category;
-
-	public Product() {
-	}
-
-	public Product(String productName, BigDecimal productPrice, Category category) {
-		this.productName = productName;
-		this.productPrice = productPrice;
-		this.category = category;
-	}
 
 }

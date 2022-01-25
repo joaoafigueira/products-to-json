@@ -17,6 +17,13 @@ import lombok.Data;
 @Data
 public class Category {
 
+	public Category() {
+	}
+	
+	public Category(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -27,11 +34,5 @@ public class Category {
 	private List<Product> products = new ArrayList<>();
 
 	
-	public Category() {
-	}
-	
-	public Category(String categoryName) {
-		this.categoryName = categoryName;
-	}
 		
 }
