@@ -3,6 +3,7 @@ package br.com.joao.productsjson.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,7 +31,7 @@ public class Category {
 
 	private String categoryName;
 	@JsonManagedReference
-	@OneToMany(mappedBy = "category")
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	private List<Product> products = new ArrayList<>();
 
 	

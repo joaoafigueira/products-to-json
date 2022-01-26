@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.joao.productsjson.controller.dto.CategoryDto;
 import br.com.joao.productsjson.controller.form.CategoryForm;
-import br.com.joao.productsjson.controller.form.UpdateCategoryForm;
 import br.com.joao.productsjson.model.Category;
 import br.com.joao.productsjson.repository.RepositoryCategory;
 
@@ -68,8 +68,7 @@ public class ControllerCategory {
 
 			return ResponseEntity.created(uri).body(new CategoryDto(category));
 		}
-		throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-				"This category already exists in our database");
+		throw new ResponseStatusException(HttpStatus.CONFLICT, "This category already exists in our database");
 
 	}
 
@@ -89,7 +88,29 @@ public class ControllerCategory {
 
 		}
 
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This product doesnt exist in our database");
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This category doesnt exist in our database");
 	}
+
+	@DeleteMapping("/{id}")
+	@Transactional
+	@CacheEvict(value = { "availableCategories", "availableProducts" }, allEntries = true)
+	public ResponseEntity<?> removeCategory(@PathVariable Long id) {
+
+		Optional<Category> categoryExist = repositoryCategory.findById(id);
+
+		if (categoryExist.isPresent()) {
+
+			repositoryCategory.deleteById(id);
+
+			return ResponseEntity.ok().build();
+		}
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This category doesnt exist in our database");
+	}
+	
+	
+	
+	
+	
+	
 
 }
