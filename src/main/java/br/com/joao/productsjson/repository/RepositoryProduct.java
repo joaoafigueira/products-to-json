@@ -5,5 +5,5 @@ import br.com.joao.productsjson.model.Product;
 
 
 public interface RepositoryProduct extends JpaRepository<Product,Long> {
-
+	
 }
