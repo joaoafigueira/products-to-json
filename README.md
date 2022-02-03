@@ -1,4 +1,4 @@
-# Virtual Store  -  in development
+# Virtual Store  
 
 A REST API for managing an online store.
 
