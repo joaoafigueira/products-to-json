@@ -11,7 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableCaching
 @EnableSpringDataWebSupport
 @EnableSwagger2
-public class ProductsJsonApplication {
+public class ProductsJsonApplication{
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProductsJsonApplication.class, args);
