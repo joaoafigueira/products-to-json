@@ -16,7 +16,9 @@ Before you begin, ensure you have met the following requirements:
 To run this project simply execute this commands inside the project path
 
 ```shell script
-./make run
+./mvn clean package
+docker build -t joao/virtual-store-api:latest . 
+docker run joao/virtual-store-api:latest
 ```
 or if you just want to view the documentation you can try: 
 
