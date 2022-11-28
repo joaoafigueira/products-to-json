@@ -1,6 +1,6 @@
 # Virtual Store  
 
-A REST API for managing an online store.
+A RESTful API for managing an online store.
 
 ## Prerequisites
 
